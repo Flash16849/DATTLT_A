@@ -18,7 +18,7 @@ class _AdminCrudScreenState extends State<AdminCrudScreen> {
   List<TestQuestion> tempList =
       []; //tempList được tạo ra để sử dụng cho hàm applyFilter và applySort bên dưới
   String selectedLevel = 'All';
-  final List<String> levels = ['All', 'Easy', 'Medium', 'Hard'];
+  final List<String> levels = ['All', 'Easy', 'Medium', 'Hard', 'Images'];
 
   @override
   void initState() {
@@ -42,6 +42,10 @@ class _AdminCrudScreenState extends State<AdminCrudScreen> {
   void applyFilter() {
     if (selectedLevel == 'All') {
       tempList = questions;
+    } else if (selectedLevel == 'Images') {
+      tempList = questions
+          .where((r) => r.questionImg != Null && r.questionImg!.isNotEmpty)
+          .toList();
     } else {
       tempList =
           questions

@@ -50,7 +50,19 @@ class _LoginPageState extends State<LoginScreen> {
       builder: (context) {
         return AlertDialog(
           title: const Text('Welcome'),
-          content: Text('Welcome back, $userName!'),
+          content: RichText(
+            text: TextSpan(
+              style: Theme.of(context).textTheme.bodyMedium,
+              children: [
+                const TextSpan(text: 'Welcome back, '),
+                TextSpan(
+                  text: '$userName',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const TextSpan(text: '!'),
+              ],
+            ),
+          ),
         );
       },
     );
@@ -74,6 +86,65 @@ class _LoginPageState extends State<LoginScreen> {
     });
   }
 
+  // // Hiển thị thông báo khi tài khoản chưa được kích hoạt
+  // void showLoginUnwelcomeDialog(BuildContext context, Map<String, dynamic> user) {
+  //   final String userName = user['displayName'];
+
+  //   showDialog(
+  //     context: context,
+  //     barrierDismissible: false, // Prevent user from closing it manually
+  //     builder: (context) {
+  //       return AlertDialog(
+  //         title: const Text('Account Disabled'),
+  //         content: Text('Hello $userName, your account is disabled! Please contact the nearest administrator.'),
+  //         actions: [
+  //           TextButton(
+  //             onPressed: () => Navigator.of(context).pop(), // Close dialog
+  //             child: const Text('OK'),
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
+  void showLoginUnwelcomeDialog(BuildContext context, Map<String, dynamic> user) {
+    final String userName = user['displayName'];
+
+    showDialog(
+      context: context,
+      barrierDismissible: false, // Prevent user from closing it manually
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Account Disabled, Stupid!!!'),
+          content: RichText(
+            text: TextSpan(
+              style: Theme.of(context).textTheme.bodyMedium,
+              children: [
+                const TextSpan(text: 'Hello '),
+                TextSpan(
+                  text: '$userName',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const TextSpan(
+                  text: ', your account is disabled!\nPlease contact the nearest administrator.',
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(), // Close dialog
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
+  
+
   void handleLogin() async {
     final email = emailController.text.trim();
     final password = passwordController.text;
@@ -89,9 +160,26 @@ class _LoginPageState extends State<LoginScreen> {
       print('Login OK!');
       final data = jsonDecode(response.body);
       final user = data['user'][0];
+      final userStatus = data['user'][0]['status'];
+      print('User status: $userStatus');
+      if (userStatus != 'active') {
+        // Nếu tài khoản không hoạt động, hiển thị thông báo
+        setState(() {
+          errorText = 'TDisable account!!!';
+          AuthService.logout();
+          print(errorText);
+          showLoginUnwelcomeDialog(context, user);
+          // Hiển thị thông báo lỗi
+          isLoading = false;
+        });
+        
+      } else {
+        // Hiển thị thông báo chào mừng
+        showLoginWelcomeDialog(context, user);
+      }
       // final String userName = data['user'][0]['displayName'];
       // final String role = data['user'][0]['role'];
-      showLoginWelcomeDialog(context, user); // Show welcome dialog
+       // Show welcome dialog
     }
 
     if (response.statusCode == 400) {

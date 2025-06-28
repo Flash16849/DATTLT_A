@@ -160,8 +160,16 @@ router.put('/update/:id', upload.single('image'), async (req, res) => {
             throw new Error("MISSINGDATA");
         }
 
+        const maxTimeInt = parseInt(maxTime, 10);
+        if (isNaN(maxTimeInt)) {
+            throw new Error("INVALIDMAXTIME");
+        }
+
         // Parse options từ JSON string sang object
-        const parsedOptions = options;
+        const parsedOptions = JSON.parse(options); // Parse options từ JSON string sang object
+        // const parsedOptions = options;
+        console.log('Parsed options:', parsedOptions);
+
         if (!Array.isArray(parsedOptions) || parsedOptions.length !== 4) {
             throw new Error("INVALIDOPTIONS");
         }
@@ -227,7 +235,7 @@ router.put('/update/:id', upload.single('image'), async (req, res) => {
             questionText,
             options: parsedOptions,
             correctAnswer,
-            maxTime,
+            maxTime: maxTimeInt,
             updatedDate: new Date()
         };
 
@@ -241,6 +249,7 @@ router.put('/update/:id', upload.single('image'), async (req, res) => {
         if (error.message === "INVALIDOPTIONS") msg = 'Danh sách đáp án phải có đúng 4 lựa chọn!';
         if (error.message === "INVALIDOPTIONSFORMAT") msg = 'Mỗi lựa chọn phải có label và text!';
         if (error.message === "INVALIDCORRECTANSWER") msg = 'Đáp án đúng không khớp với bất kỳ label nào trong các lựa chọn!';
+        if (error.message === "INVALIDMAXTIME") msg = 'Thời gian tối đa không hợp lệ!';
 
         return res.status(400).json({ msg, error: error.message });
     }

@@ -1,15 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-
+// const { MongoClient } = require('mongodb');
 const authRoutes = require('./routes/auth');
 const registerRoutes = require('./routes/register');
 const questionManagerRoutes = require('./routes/questionManager');
 const userManagerRoutes = require('./routes/userManager');
 const resultRoutes = require('./routes/resultManager'); // Import route quản lý kết quả bài kiểm tra
 
-const { MongoClient } = require('mongodb');
-const User = require('./models/User');
+// const User = require('./models/User');
 const cookieParser = require('cookie-parser');
 
 const cors = require('cors');
@@ -22,11 +21,16 @@ const dbName = "User"; // Thay đổi tên cơ sở dữ liệu nếu cần
 const accessPassword = "Raccoon-1"; // Mật khẩu truy cập MongoDB
 const url = "mongodb+srv://adminM:"+accessPassword+"@usertest.1opu14d.mongodb.net/"+dbName+"?retryWrites=true&w=majority&appName=UserTest";
 
-const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true }); // Kết nối MongoDB
-const db = client.db(dbName); // Kết nối đến cơ sở dữ liệu
-const userCollection = db.collection("User"); // Tạo collection để lưu trữ người dùng
-const questionCollection = db.collection('Question'); // Tạo collection để lưu trữ câu hỏi
 
+// const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true }); // Kết nối MongoDB
+// const db = client.db(dbName); // Kết nối đến cơ sở dữ liệu
+// const userCollection = db.collection("User"); // Tạo collection để lưu trữ người dùng
+// const questionCollection = db.collection('Question'); // Tạo collection để lưu trữ câu hỏi
+
+// Kết nối MongoDB bằng MongoClient
+// client.connect()
+//   .then(() => console.log('\n=========Kết nối MongoDB thành công========='))
+//   .catch(err => console.error('Lỗi kết nối MongoDB:', err));
 // Cấu hình middleware
 app.use(cors({
   credentials: true

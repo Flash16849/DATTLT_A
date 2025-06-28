@@ -85,12 +85,24 @@ Future<bool> addQuestion(TestQuestion question, {File? imageFile,Uint8List? webI
     final uri = Uri.parse('$baseUrl/question/update/${question.questionId}');
     var request = http.MultipartRequest('PUT', uri);
 
-    // Add form fields (non-file fields)
+    // Thêm các trường không phải tệp vào request
+    // question.toJson().forEach((key, value) {
+    //   request.fields[key] = value.toString();
+    // });
+
     question.toJson().forEach((key, value) {
-      request.fields[key] = value.toString();
+      if (key == 'options') {
+        // Convert list of Options to JSON string
+        List<Map<String, dynamic>> optionsList =
+            question.options.map((opt) => opt.toJson()).toList();
+        request.fields[key] = jsonEncode(optionsList);
+      } else {
+        request.fields[key] = value.toString();
+      }
     });
 
-    // Add image if available
+    // Thêm hình ảnh
+    // Check xem có hình ảnh không, nếu có thì thêm vào request
     if (imageFile != null) {
       print("Uploading Android image: ${imageFile.path}");
       request.files.add(await http.MultipartFile.fromPath('image', imageFile.path));
@@ -98,13 +110,14 @@ Future<bool> addQuestion(TestQuestion question, {File? imageFile,Uint8List? webI
       print("Uploading Web image: $webImageName");
       request.files.add(http.MultipartFile.fromBytes('image',webImageBytes,filename: webImageName,));
     }
-
+    // print("Request fields: ${request.fields}");
+    // print("Request files: ${request.files}");
     // Send the request
     final streamedResponse = await request.send();
     final response = await http.Response.fromStream(streamedResponse);
 
-    print('PUT Response: ${response.statusCode}');
-    print('Body: ${response.body}');
+    // print('PUT Response: ${response.statusCode}');
+    // print('Body: ${response.body}');
 
     return response.statusCode == 200 || response.statusCode == 201;
   }
