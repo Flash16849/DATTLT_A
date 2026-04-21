@@ -1,4 +1,5 @@
-# English Quiz & Management Application ***This is a school project
+#**This is a school project**
+# English Quiz & Management Application
 
 A cross-platform mobile application for English learning, featuring interactive quizzes and a comprehensive Admin Panel.
 
