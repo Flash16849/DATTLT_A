@@ -6,7 +6,18 @@ A cross-platform mobile application for English learning, featuring interactive 
 <p align="center">
   <img src="projectResults/Picture12.png" width="250" />
   <img src="projectResults/Picture13.png" width="250" />
-  <img src="projectResults/Picture14.png" width="500" />
+  <img src="projectResults/Picture14.png" width="250" />
+  <img src="projectResults/Picture15.png" width="250" />
+  <img src="projectResults/Picture16.png" width="250" />
+  <img src="projectResults/Picture17.png" width="250" />
+  <img src="projectResults/Picture18.png" width="250" />
+  <img src="projectResults/Picture19.png" width="250" />
+  <img src="projectResults/Picture20.png" width="250" />
+  <img src="projectResults/Picture21.png" width="250" />
+  <img src="projectResults/Picture22.png" width="250" />
+  <img src="projectResults/Picture23.png" width="250" />
+  <img src="projectResults/Picture8.png" width="250" />
+  <img src="projectResults/Picture9.png" width="250" />
 </p>
 
 ## 🚀 Key Features
